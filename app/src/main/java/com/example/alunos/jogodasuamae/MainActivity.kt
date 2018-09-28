@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.security.AccessController.getContext
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,9 +49,7 @@ class MainActivity : AppCompatActivity() {
             var id: Int
             var nome: String
             for(i in 1..9){
-                nome = "button{$i}"
-                id = resources.getIdentifier(nome, "id", this.packageName)
-                btn = findViewById(id)
+                btn = pegarBotao(i)
                 btn.setText(" ")
                 btn.setEnabled(true)
             }
@@ -74,6 +73,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun vezComputador(){
-        
+        var num = Random().nextInt(6) + 1
+        var btn = pegarBotao(num)
+        var texto = btn.text
+        if(texto.equals("O")){
+            vezComputador()
+        }
+        else{
+            btn.setText("O")
+            btn.setEnabled(false)
+        }
+    }
+
+    fun pegarBotao(num: Int): Button{
+        var nome = "button{$num}"
+        var id = resources.getIdentifier(nome, "id", this.packageName)
+        var btn: Button = findViewById(id)
+        return btn
     }
 }
