@@ -91,4 +91,25 @@ class MainActivity : AppCompatActivity() {
         var btn: Button = findViewById(id)
         return btn
     }
+
+    fun checkarFim(){
+        var btn1 = pegarBotao(1)
+        var btn2 = pegarBotao(2)
+        var btn3 = pegarBotao(3)
+        var btn4 = pegarBotao(4)
+        var btn5 = pegarBotao(5)
+        var btn6 = pegarBotao(6)
+        var btn7 = pegarBotao(7)
+        var btn8 = pegarBotao(8)
+        var btn9 = pegarBotao(9)
+    }
+
+    fun checkarLado(txt: String): Boolean{
+        if(txt.equals("X")){
+            return true
+        }
+        else{
+            return false
+        }
+    }
 }
