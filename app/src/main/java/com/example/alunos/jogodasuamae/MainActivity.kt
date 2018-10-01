@@ -77,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         travarTudo()
         checkarFim()
         if(!terminou){
+            setReset(false)
             vezComputador()
         }
     }
@@ -85,22 +86,22 @@ class MainActivity : AppCompatActivity() {
         var num = Random().nextInt(9) + 1
         var btn = pegarBotao(num)
         var texto = btn.text
-        if(texto.equals("O")){
+        if(texto.equals("O") || texto.equals("X")){
             vezComputador()
         }
         else{
             btn.setText("O")
             btn.setEnabled(false)
-        }
-        checkarFim()
-        if(!terminou){
-            destravarTudo()
+            checkarFim()
+            if(!terminou){
+                destravarTudo()
+            }
+            setReset(true)
         }
     }
 
     fun pegarBotao(num: Int): Button{
-        var nome = "button{$num}"
-        var id = resources.getIdentifier(nome, "id", this.packageName)
+        var id = resources.getIdentifier("button" + num.toString(), "id", this.packageName)
         var btn: Button = findViewById(id)
         return btn
     }
@@ -153,6 +154,12 @@ class MainActivity : AppCompatActivity() {
                 btn.setEnabled(true)
             }
         }
+    }
+
+    fun setReset(b: Boolean){
+        var id = resources.getIdentifier("resetar", "id", this.packageName)
+        var reset = findViewById<Button>(id)
+        reset.setEnabled(b)
     }
 
     fun checkarEmpate(){
