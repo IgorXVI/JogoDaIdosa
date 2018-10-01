@@ -42,37 +42,47 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var terminou = false
+
     fun resetarJogo(view: View){
-        runOnUiThread {
-            var btn: Button
-            var id: Int
-            var nome: String
-            for(i in 1..9){
-                btn = pegarBotao(i)
-                btn.setText(" ")
-                btn.setEnabled(true)
-            }
+        terminou = false
+        for(i in 1..9){
+            var btn = pegarBotao(i)
+            btn.setText(" ")
+            btn.setEnabled(true)
         }
     }
 
-    fun messagemPerdeu(){
+    fun menssagemPerdeu(){
+        terminou = true
         var text = Toast.makeText(this, "Você Perdeu!", Toast.LENGTH_SHORT)
         text.show()
     }
 
-    fun messagemVenceu(){
+    fun menssagemVenceu(){
+        terminou = true
         var text = Toast.makeText(this, "Você Venceu!", Toast.LENGTH_SHORT)
+        text.show()
+    }
+
+    fun menssagemEmpate(){
+        terminou = true
+        var text = Toast.makeText(this, "Empate!", Toast.LENGTH_SHORT)
         text.show()
     }
 
     fun vezJogador(btn: Button){
         btn.setText("X")
         btn.setEnabled(false)
-        vezComputador()
+        travarTudo()
+        checkarFim()
+        if(!terminou){
+            vezComputador()
+        }
     }
 
     fun vezComputador(){
-        var num = Random().nextInt(6) + 1
+        var num = Random().nextInt(9) + 1
         var btn = pegarBotao(num)
         var texto = btn.text
         if(texto.equals("O")){
@@ -81,6 +91,10 @@ class MainActivity : AppCompatActivity() {
         else{
             btn.setText("O")
             btn.setEnabled(false)
+        }
+        checkarFim()
+        if(!terminou){
+            destravarTudo()
         }
     }
 
@@ -101,28 +115,66 @@ class MainActivity : AppCompatActivity() {
         var btn7 = pegarBotao(7).text
         var btn8 = pegarBotao(8).text
         var btn9 = pegarBotao(9).text
-
+        var linha1 = btn1.equals(btn2) && btn2.equals(btn3)
+        var coluna1 = btn1.equals(btn4) && btn4.equals(btn7)
+        var diagonal1 = btn1.equals(btn5) && btn5.equals(btn9)
+        var linha2 = btn4.equals(btn5) && btn5.equals(btn6)
+        var linha3 = btn7.equals(btn8) && btn8.equals(btn9)
+        var coluna2 = btn2.equals(btn5)&& btn5.equals(btn8)
+        var coluna3 = btn3.equals(btn6) && btn6.equals(btn9)
+        var diagonal2 = btn3.equals(btn5) && btn5.equals(btn7)
+        if(linha1 || coluna1 || diagonal1){
+            checkarLado(btn1)
+        }
+        else if(linha2 || coluna2 || diagonal2){
+            checkarLado(btn5)
+        }
+        else if(linha3 || coluna3){
+            checkarLado(btn9)
+        }
+        else{
+            checkarEmpate()
+        }
     }
 
     fun travarTudo(){
-        var btn: Button
         for(i in 1..9){
-            btn = pegarBotao(i)
-            if(btn.text.equals(" ")){
+            var btn = pegarBotao(i)
+            if(!btn.text.equals("X") && !btn.text.equals("O")){
                 btn.setEnabled(false)
             }
         }
     }
 
-    fun checkarLado(txt: String): Int{
+    fun destravarTudo(){
+        for(i in 1..9){
+            var btn = pegarBotao(i)
+            if(!btn.text.equals("X") && !btn.text.equals("O")){
+                btn.setEnabled(true)
+            }
+        }
+    }
+
+    fun checkarEmpate(){
+        var empate = true
+        for(i in 1..9){
+            var btn = pegarBotao(i).text
+            if(!btn.equals("X") && !btn.equals("O")){
+                empate = false
+                break
+            }
+        }
+        if(empate){
+            menssagemEmpate()
+        }
+    }
+
+    fun checkarLado(txt: CharSequence){
         if(txt.equals("X")){
-            return 1
+            menssagemVenceu()
         }
         else if(txt.equals("O")){
-            return 2
-        }
-        else{
-            return 3
+            menssagemPerdeu()
         }
     }
 }
